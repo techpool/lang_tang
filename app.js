@@ -122,7 +122,13 @@ app.post('/audio', upload.any(), function (req, res, next) {
             speechClient.recognize(requestData)
                 .then((results) => {
                     console.log(results);
-                    const transcription = results[0].results[0].alternatives[0].transcript;
+
+                    let transcription = ''
+                    if (!results || results.length === 0 || !results[0].results || results[0].results.length === 0 ) {
+                    	transcription = 'Could not understand what you just said!';
+                    } else {
+                    	transcription = results[0].results[0].alternatives[0].transcript;
+                    }
                     console.log(`Transcription: ${transcription}`);
 
                     translateClient.translate(transcription, targetLanguage.split('-')[0])
@@ -144,6 +150,9 @@ app.post('/audio', upload.any(), function (req, res, next) {
                 })
                 .catch((err) => {
                     console.error('ERROR:', err);
+                    res.status(400).json({
+                    	'info': err
+                    });
                 });
         }
     ]);
