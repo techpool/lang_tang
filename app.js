@@ -29,7 +29,7 @@ app.post('/audio', upload.any(), function (req, res, next) {
     console.log(req.body);
     console.log(req.files);
     const targetLanguage = req.body.targetLanguage;
-    const originLanguage = req.body.originLanguage;
+    const originLanguage = req.body.language;
 
     // The name of the audio file to transcribe
     const fileName = req.files[0].path;
